@@ -199,6 +199,10 @@
                         <div class="student-info">
                             <div class="row">
                                 <div class="col-md-7">
+                                    <small class="text-muted d-block">ลำดับที่สอบได้</small>
+                                    <span class="h5 fw-bold text-dark" id="Code"></span>
+                                </div>
+                                <div class="col-md-7">
                                     <small class="text-muted d-block">ชื่อ-นามสกุล</small>
                                     <span class="h5 fw-bold text-dark" id="resName"></span>
                                 </div>
@@ -386,7 +390,7 @@
             document.getElementById('resLevel').textContent = json.level;
             document.getElementById('resName').textContent = `${d.name} ${d.surname}`;
             document.getElementById('resCode').textContent = d.code;
-
+            document.getElementById('Code').textContent = d.seq;
             // --- Fill My Scores (Cards) ---
             document.getElementById('sSci').textContent = d.sci;
             document.getElementById('sMath').textContent = d.math;
