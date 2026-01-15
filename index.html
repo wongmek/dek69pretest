@@ -4,210 +4,343 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบประกาศผลสอบออนไลน์</title>
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome (Icons) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts (Prompt) -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --bg-color: #ecf0f1;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+        }
+
         body {
-            font-family: 'Sarabun', sans-serif;
-            background-color: #f4f6f9;
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        .header-banner {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+
+        /* Banner */
+        .modern-banner {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
             color: white;
-            padding: 20px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem 0 3rem 0;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 20px rgba(44, 62, 80, 0.3);
         }
+
         .school-logo {
-            max-height: 100px;
+            height: 90px;
             width: auto;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+            transition: transform 0.3s;
         }
-        .search-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            margin-top: -30px;
-            padding: 30px;
-            position: relative;
+        .school-logo:hover { transform: scale(1.05); }
+
+        .main-container {
+            margin-top: -40px;
+            padding-bottom: 40px;
         }
-        .result-card {
-            display: none; /* ซ่อนไว้ก่อน */
-            margin-top: 20px;
-            border-radius: 15px;
+
+        .custom-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
-        .result-header {
-            background-color: #2a5298;
+
+        .card-header-custom {
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            padding: 15px 20px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        /* Form */
+        .form-control-custom {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        .form-control-custom:focus {
+            border-color: var(--accent-color);
+            box-shadow: none;
+        }
+        .btn-search {
+            background-color: var(--secondary-color);
             color: white;
-            padding: 15px;
-            text-align: center;
+            border-radius: 12px;
+            padding: 10px 30px;
+            transition: all 0.3s;
         }
-        .score-box {
-            text-align: center;
-            padding: 15px;
+        .btn-search:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Student Info */
+        .student-info {
+            background-color: #f1f4f6;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Score Boxes */
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .score-item {
+            background: white;
             border: 1px solid #eee;
-            border-radius: 10px;
-            background-color: #fff;
-            height: 100%;
-            transition: transform 0.2s;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
         }
-        .score-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .score-val {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #1e3c72;
+        .score-value {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--primary-color);
         }
         .score-label {
-            font-size: 0.9rem;
-            color: #666;
+            font-size: 0.85rem;
+            color: #7f8c8d;
         }
-        .total-score {
-            background-color: #e3f2fd;
-            border-color: #bbdefb;
+
+        /* Table Stats */
+        .table-custom th {
+            background-color: #f8f9fa;
+            color: var(--secondary-color);
+            font-weight: 600;
         }
-        .total-score .score-val {
-            color: #0d47a1;
+        .table-custom td {
+            vertical-align: middle;
         }
-        .loader {
+        .total-row {
+            background-color: #e8f6f3 !important;
+            font-weight: bold;
+        }
+
+        /* Loading */
+        .loading-overlay {
             display: none;
-            width: 48px;
-            height: 48px;
-            border: 5px solid #FFF;
-            border-bottom-color: #2a5298;
-            border-radius: 50%;
-            display: inline-block;
-            box-sizing: border-box;
-            animation: rotation 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-banner">
+    <div class="modern-banner">
         <div class="container">
-            <div class="row align-items-center text-center text-md-start">
-                <div class="col-md-2 text-center mb-3 mb-md-0">
-                    <img src="https://drive.google.com/uc?export=view&id=1S9i7y5py8Cc1ZBsW8tnLCwViDsLvdCq8" alt="Logo School" class="school-logo">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                     <img src="https://img5.pic.in.th/file/secure-sv1/PSUWIT.png" class="school-logo" alt="School Logo">
                 </div>
                 <div class="col-md-8 text-center">
-                    <h2 class="fw-bold">ระบบประกาศผลสอบออนไลน์</h2>
-                    <p class="mb-0 fs-5">กลุ่มทดสอบความรู้ นักเรียนชั้น ป.5 และ ม.2</p>
+                    <h3 class="fw-bold mb-1">ระบบประกาศผลสอบ โรงเรียน มอ.วิทยานุสรณ์</h3>
+                    <p class="mb-0 text-white-50">กลุ่มทดสอบความรู้ นักเรียนชั้น ป.5 และ ม.2</p>
                 </div>
-                <div class="col-md-2 text-center mt-3 mt-md-0">
-                    <img src="https://drive.google.com/uc?export=view&id=1LTC9buUqRT8XktmDawQSH8mKXY2Phf7B" alt="Logo Project" class="school-logo">
+                <div class="col-md-2 text-center text-md-end mt-3 mt-md-0">
+                    <img src="https://img2.pic.in.th/pic/PSUWIT_Circle.png" class="school-logo" alt="Project Logo">
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container pb-5">
-        
+    <div class="container main-container">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="search-card">
-                    <h4 class="text-center mb-4 text-secondary">กรอกเลขบัตรประจำตัวประชาชนเพื่อค้นหา</h4>
+            
+            <div class="col-lg-8 col-md-10">
+                <div class="custom-card p-4">
                     <form id="searchForm" onsubmit="searchResult(event)">
-                        <div class="input-group mb-3">
-                            <input type="text" id="citizenId" class="form-control form-control-lg text-center" placeholder="เลขบัตรประชาชน 13 หลัก" maxlength="13" required pattern="\d*">
-                            <button class="btn btn-primary btn-lg px-4" type="submit">ค้นหาผลสอบ</button>
+                        <label class="form-label text-muted ms-1"><i class="fas fa-search me-1"></i> ค้นหาผลสอบ</label>
+                        <div class="input-group">
+                            <input type="text" id="citizenId" class="form-control form-control-custom" placeholder="เลขบัตรประจำตัวประชาชน 13 หลัก" maxlength="13" required pattern="\d*">
+                            <button class="btn btn-search" type="submit">ค้นหา</button>
                         </div>
                     </form>
-                    <div id="loading" class="text-center" style="display: none;">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+
+            <!-- Result Section -->
+            <div class="col-lg-10 mt-2" id="resultArea" style="display: none;">
+                <div class="custom-card">
+                    <div class="card-header-custom d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-user-graduate me-2"></i>ผลการทดสอบ: <span id="resLevel"></span></span>
+                        <small class="text-muted" id="currentDate"></small>
+                    </div>
+                    <div class="card-body p-4">
+                        
+                        <div class="student-info">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <small class="text-muted d-block">ชื่อ-นามสกุล</small>
+                                    <span class="h5 fw-bold text-dark" id="resName"></span>
+                                </div>
+                                <div class="col-md-5 text-md-end mt-2 mt-md-0">
+                                    <small class="text-muted d-block">รหัสประจำตัวสอบ</small>
+                                    <span class="h5 text-primary" id="resCode"></span>
+                                </div>
+                            </div>
                         </div>
-                        <p class="mt-2 text-muted">กำลังค้นหาข้อมูล...</p>
+
+                        <!-- คะแนนของฉัน -->
+                        <h6 class="text-secondary fw-bold mb-3"><i class="fas fa-star me-2"></i>คะแนนสอบของคุณ</h6>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <div class="score-value" id="sSci">-</div>
+                                <div class="score-label">วิทยาศาสตร์</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-value" id="sMath">-</div>
+                                <div class="score-label">คณิตศาสตร์</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-value" id="sInt">-</div>
+                                <div class="score-label">บูรณาการ</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-value" id="sThai">-</div>
+                                <div class="score-label">ภาษาไทย</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-value" id="sEng">-</div>
+                                <div class="score-label">ภาษาอังกฤษ</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-value" id="sGen">-</div>
+                                <div class="score-label">ความรู้ทั่วไป</div>
+                            </div>
+                        </div>
+
+                        <!-- ตารางสถิติเปรียบเทียบ -->
+                        <h6 class="text-secondary fw-bold mb-3 mt-4"><i class="fas fa-chart-line me-2"></i>ตารางเปรียบเทียบค่าสถิติรุ่น</h6>
+                        <div class="table-responsive rounded-3 border">
+                            <table class="table table-hover table-custom mb-0 text-center">
+                                <thead>
+                                    <tr>
+                                        <th class="text-start">วิชา</th>
+                                        <th>คะแนนเต็ม</th>
+                                        <th>คะแนนที่ได้</th>
+                                        <th>Max (สูงสุด)</th>
+                                        <th>Min (ต่ำสุด)</th>
+                                        <th>Mean (เฉลี่ย)</th>
+                                        <th>S.D.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-start">วิทยาศาสตร์</td>
+                                        <td>40</td>
+                                        <td class="fw-bold text-primary" id="tSci">-</td>
+                                        <td id="mSciMax">-</td>
+                                        <td id="mSciMin">-</td>
+                                        <td id="mSciAvg">-</td>
+                                        <td id="mSciSd">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-start">คณิตศาสตร์</td>
+                                        <td>40</td>
+                                        <td class="fw-bold text-primary" id="tMath">-</td>
+                                        <td id="mMathMax">-</td>
+                                        <td id="mMathMin">-</td>
+                                        <td id="mMathAvg">-</td>
+                                        <td id="mMathSd">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-start">บูรณาการ</td>
+                                        <td>10</td>
+                                        <td class="fw-bold text-primary" id="tInt">-</td>
+                                        <td id="mIntMax">-</td>
+                                        <td id="mIntMin">-</td>
+                                        <td id="mIntAvg">-</td>
+                                        <td id="mIntSd">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-start">ภาษาไทย</td>
+                                        <td>30</td>
+                                        <td class="fw-bold text-primary" id="tThai">-</td>
+                                        <td id="mThaiMax">-</td>
+                                        <td id="mThaiMin">-</td>
+                                        <td id="mThaiAvg">-</td>
+                                        <td id="mThaiSd">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-start">ภาษาอังกฤษ</td>
+                                        <td>40</td>
+                                        <td class="fw-bold text-primary" id="tEng">-</td>
+                                        <td id="mEngMax">-</td>
+                                        <td id="mEngMin">-</td>
+                                        <td id="mEngAvg">-</td>
+                                        <td id="mEngSd">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-start">ความรู้ทั่วไป</td>
+                                        <td>30</td>
+                                        <td class="fw-bold text-primary" id="tGen">-</td>
+                                        <td id="mGenMax">-</td>
+                                        <td id="mGenMin">-</td>
+                                        <td id="mGenAvg">-</td>
+                                        <td id="mGenSd">-</td>
+                                    </tr>
+                                    <tr class="total-row">
+                                        <td class="text-start">คะแนนรวม</td>
+                                        <td>200</td>
+                                        <td class="text-primary fs-5" id="tTotal">-</td>
+                                        <td id="mTotalMax">-</td>
+                                        <td id="mTotalMin">-</td>
+                                        <td id="mTotalAvg">-</td>
+                                        <td id="mTotalSd">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
+
         </div>
+    </div>
 
-        <div id="resultArea" class="row justify-content-center result-card bg-white">
-            <div class="col-12 p-0">
-                <div class="result-header">
-                    <h3 class="mb-0">ผลการทดสอบ: <span id="studentLevel"></span></h3>
-                </div>
-            </div>
-            <div class="col-12 p-4">
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <p class="fs-5"><strong>ชื่อ-นามสกุล:</strong> <span id="studentName" class="text-primary"></span></p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="fs-5"><strong>รหัสประจำตัวสอบ:</strong> <span id="studentCode"></span></p>
-                    </div>
-                </div>
-
-                <h5 class="border-bottom pb-2 mb-3">คะแนนรายวิชา</h5>
-                
-                <div class="row g-3">
-                    <div class="col-6 col-md-4 col-lg-2">
-                        <div class="score-box">
-                            <div class="score-val" id="scoreSci">-</div>
-                            <div class="score-label">วิทยาศาสตร์ (40)</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2">
-                        <div class="score-box">
-                            <div class="score-val" id="scoreMath">-</div>
-                            <div class="score-label">คณิตศาสตร์ (40)</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2">
-                        <div class="score-box">
-                            <div class="score-val" id="scoreInt">-</div>
-                            <div class="score-label">บูรณาการ (10)</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2">
-                        <div class="score-box">
-                            <div class="score-val" id="scoreThai">-</div>
-                            <div class="score-label">ภาษาไทย (30)</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2">
-                        <div class="score-box">
-                            <div class="score-val" id="scoreEng">-</div>
-                            <div class="score-label">อังกฤษ (40)</div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-4 col-lg-2">
-                        <div class="score-box">
-                            <div class="score-val" id="scoreGen">-</div>
-                            <div class="score-label">ความรู้ทั่วไป (30)</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row justify-content-center mt-4">
-                    <div class="col-md-4">
-                        <div class="score-box total-score">
-                            <div class="score-val" id="scoreTotal">-</div>
-                            <div class="score-label">คะแนนรวม (200)</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <div id="loading" class="loading-overlay">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+        <p class="mt-3 text-secondary fw-bold">กำลังค้นหาข้อมูล...</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // ******************************************************
-        // ใส่ URL ของ Google Apps Script Web App ที่ได้จากการ Deploy ตรงนี้
+        // ใส่ URL ของ Google Apps Script ที่ Deploy ใหม่ตรงนี้ครับ
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbx4UanVBbNsjWmWLpenBSLQBOj9TD8cnYBOjE8SCxJd3IOG_Br3Qkms5XhDw1N6fwYKGQ/exec'; 
         // ******************************************************
+
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
 
         function searchResult(event) {
             event.preventDefault();
@@ -217,23 +350,21 @@
 
             if(!id) return;
 
-            // UI Reset
             resultArea.style.display = 'none';
-            loading.style.display = 'block';
+            loading.style.display = 'flex';
 
             fetch(`${GAS_URL}?id=${id}`)
                 .then(response => response.json())
                 .then(json => {
                     loading.style.display = 'none';
-                    
                     if (json.status === 'success') {
                         showData(json);
                     } else {
                         Swal.fire({
-                            icon: 'error',
+                            icon: 'warning',
                             title: 'ไม่พบข้อมูล',
-                            text: 'ไม่พบเลขบัตรประชาชนนี้ในระบบ หรือกรอกผิดพลาด',
-                            confirmButtonText: 'ตกลง'
+                            text: 'ไม่พบเลขบัตรประชาชนนี้ในระบบ',
+                            confirmButtonColor: '#34495e'
                         });
                     }
                 })
@@ -243,35 +374,60 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'เกิดข้อผิดพลาด',
-                        text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
+                        text: 'ระบบขัดข้องชั่วคราว',
                     });
                 });
         }
 
         function showData(json) {
             const d = json.data;
+            const s = json.stats; // รับค่าสถิติที่เป็น object รายวิชา
             
-            // แสดงระดับชั้น
-            document.getElementById('studentLevel').textContent = json.level;
-            
-            // ข้อมูลนักเรียน
-            document.getElementById('studentName').textContent = `${d.name} ${d.surname}`;
-            document.getElementById('studentCode').textContent = d.code;
+            document.getElementById('resLevel').textContent = json.level;
+            document.getElementById('resName').textContent = `${d.name} ${d.surname}`;
+            document.getElementById('resCode').textContent = d.code;
 
-            // คะแนน
-            document.getElementById('scoreSci').textContent = d.sci;
-            document.getElementById('scoreMath').textContent = d.math;
-            document.getElementById('scoreInt').textContent = d.integrated;
-            document.getElementById('scoreThai').textContent = d.thai;
-            document.getElementById('scoreEng').textContent = d.eng;
-            document.getElementById('scoreGen').textContent = d.general;
-            document.getElementById('scoreTotal').textContent = d.total;
+            // --- Fill My Scores (Cards) ---
+            document.getElementById('sSci').textContent = d.sci;
+            document.getElementById('sMath').textContent = d.math;
+            document.getElementById('sInt').textContent = d.integrated;
+            document.getElementById('sThai').textContent = d.thai;
+            document.getElementById('sEng').textContent = d.eng;
+            document.getElementById('sGen').textContent = d.general;
 
-            // Show Result Area
-            document.getElementById('resultArea').style.display = 'flex';
+            // --- Fill Table Data (My Score & Stats) ---
             
-            // เลื่อนหน้าจอลงมาที่ผลลัพธ์
-            document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+            // Helper function to fill a row
+            function fillRow(subjectKey, studentScore, elementPrefix) {
+                // คะแนนนักเรียนในตาราง
+                document.getElementById('t' + elementPrefix).textContent = studentScore;
+                
+                // สถิติจาก config
+                const statObj = s[subjectKey] || { max: '-', min: '-', avg: '-', sd: '-' };
+                document.getElementById('m' + elementPrefix + 'Max').textContent = statObj.max;
+                document.getElementById('m' + elementPrefix + 'Min').textContent = statObj.min;
+                document.getElementById('m' + elementPrefix + 'Avg').textContent = statObj.avg;
+                document.getElementById('m' + elementPrefix + 'Sd').textContent = statObj.sd;
+            }
+
+            fillRow('sci', d.sci, 'Sci');
+            fillRow('math', d.math, 'Math');
+            fillRow('integrated', d.integrated, 'Int');
+            fillRow('thai', d.thai, 'Thai');
+            fillRow('eng', d.eng, 'Eng');
+            fillRow('general', d.general, 'Gen');
+            fillRow('total', d.total, 'Total');
+
+            // Show Area
+            const area = document.getElementById('resultArea');
+            area.style.display = 'block';
+            area.style.opacity = 0;
+            area.style.transform = 'translateY(20px)';
+            area.style.transition = 'all 0.5s ease';
+            setTimeout(() => {
+                area.style.opacity = 1;
+                area.style.transform = 'translateY(0)';
+            }, 10);
         }
     </script>
 </body>
